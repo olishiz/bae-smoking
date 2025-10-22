@@ -1,6 +1,6 @@
 # 🌱 Bae Plant Growth Tracker
 
-A fun, gamified daily habit tracker where you nurture a virtual marijuana plant from seed to full maturity! Now with **real backend server and database**!
+A fun, gamified daily habit tracker where you nurture a virtual marijuana plant from seed to full maturity! Built with **NestJS, TypeScript, and Node.js**!
 
 ## 🚀 Quick Start
 
@@ -9,9 +9,19 @@ A fun, gamified daily habit tracker where you nurture a virtual marijuana plant 
 npm install
 ```
 
-### 2. Start the Server
+### 2. Build the Project (First Time)
+```bash
+npm run build
+```
+
+### 3. Start the Server
 ```bash
 npm start
+```
+
+Or for development with auto-reload:
+```bash
+npm run start:dev
 ```
 
 The server will start on http://localhost:3000
@@ -27,13 +37,15 @@ Open your browser and go to:
 
 ## 🔐 User Accounts & Real Database
 
-The app now uses a **real backend server with file-based database**!
+The app uses a **professional NestJS backend with TypeScript and file-based database**!
 
 ### Why This Matters
 - **Works across devices**: Register on your phone, login on your friend's phone - same account!
 - **Persistent data**: All user data is stored in `database.json` on the server
 - **Multi-user support**: Each user has completely separate plant data
 - **Real authentication**: Session-based login system with tokens
+- **Type-safe**: Full TypeScript support with strict typing
+- **Scalable architecture**: Built with NestJS modules, services, and controllers
 
 ### Features
 - **Register**: Create a new account with username (min 3 characters) and password (min 4 characters)
@@ -117,7 +129,7 @@ The `database.json` file contains:
 - **History log** - Review your journey with your plant
 - **Responsive design** - Works on mobile and desktop
 - **Automatic save** - Never lose your progress
-- **Local database** - All data stored securely in your browser
+- **Server-side database** - All data stored securely on the server
 
 ## 🏆 Achievement
 
@@ -125,12 +137,37 @@ Reach Day 35 to grow a fully mature plant! Can you maintain your streak all the 
 
 ## 🔧 Technical Details
 
-### Backend
-- **Node.js** - Server runtime
-- **Express.js** - Web framework
+### Backend Architecture
+- **NestJS 10** - Progressive Node.js framework with TypeScript
+- **TypeScript** - Strict type safety and modern JavaScript features
+- **Modular Architecture** - Organized into modules (Auth, Plant, Database)
+- **Dependency Injection** - Built-in IoC container
+- **Decorators** - Clean, declarative code style
 - **File-based JSON database** - Simple and portable
+- **Class Validator** - Request validation with DTOs
 - **CORS enabled** - Cross-origin resource sharing
-- **RESTful API** - Clean API endpoints
+- **RESTful API** - Clean, well-structured API endpoints
+
+### Project Structure
+```
+src/
+├── main.ts                    # Application entry point
+├── app.module.ts              # Root module
+├── auth/                      # Authentication module
+│   ├── auth.module.ts
+│   ├── auth.controller.ts
+│   └── auth.service.ts
+├── plant/                     # Plant data module
+│   ├── plant.module.ts
+│   ├── plant.controller.ts
+│   └── plant.service.ts
+├── database/                  # Database service
+│   └── database.service.ts
+└── common/                    # Shared DTOs
+    └── dto/
+        ├── auth.dto.ts
+        └── plant.dto.ts
+```
 
 ### Frontend
 - **Pure HTML5** - No build tools required
