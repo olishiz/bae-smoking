@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Bae Plant Growth Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌱 My Plant Journey</h1>
+            <p class="subtitle">Grow your plant from seed to full bloom</p>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat">
+                <span class="stat-label">Day</span>
+                <span class="stat-value" id="currentDay">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Growth Stage</span>
+                <span class="stat-value" id="growthStage">Seed</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Health</span>
+                <span class="stat-value" id="healthStatus">🌟</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Streak</span>
+                <span class="stat-value" id="streakCount">0</span>
+            </div>
+        </div>
+
+        <div class="plant-container">
+            <div class="pot">
+                <div class="plant" id="plant">
+                    <div class="plant-stage seed"></div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text" id="progressText">0% to next stage</p>
+        </div>
+
+        <div class="actions">
+            <button id="waterBtn" class="action-btn water-btn">
+                💧 Water Plant
+            </button>
+            <button id="careBtn" class="action-btn care-btn">
+                ✨ Give Love
+            </button>
+            <button id="checkInBtn" class="action-btn checkin-btn">
+                ✅ Daily Check-in
+            </button>
+        </div>
+
+        <div class="info-panel">
+            <div class="message" id="messageBox">
+                Welcome! Start your journey by checking in daily. Your plant needs water and love to grow! 🌱
+            </div>
+            <div class="last-checkin">
+                <small>Last check-in: <span id="lastCheckIn">Never</span></small>
+            </div>
+        </div>
+
+        <div class="history">
+            <h3>Growth History</h3>
+            <div id="historyLog" class="history-log">
+                <p class="history-item">🌱 Your journey begins...</p>
+            </div>
+        </div>
+
+        <button id="resetBtn" class="reset-btn">Reset Progress</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
