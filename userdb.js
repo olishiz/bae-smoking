@@ -1,8 +1,10 @@
 // API-based User Database
 class UserDatabase {
     constructor() {
-        this.apiUrl = window.location.origin; // Use same host as frontend
+        // Use configured API URL from config.js
+        this.apiUrl = typeof CONFIG !== 'undefined' ? CONFIG.API_URL : window.location.origin;
         this.sessionTokenKey = 'plantTracker_sessionToken';
+        console.log('UserDatabase initialized with API URL:', this.apiUrl);
     }
 
     // Get session token from localStorage

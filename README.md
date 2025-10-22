@@ -35,6 +35,54 @@ Open your browser and go to:
 - Login with your credentials
 - Start growing your plant!
 
+## 📱 Cross-Device Access Setup
+
+**IMPORTANT**: To access from other devices (phones, tablets, other computers), follow these steps:
+
+### 1. Find Your Server's IP Address
+
+**On Windows:**
+```bash
+ipconfig
+```
+Look for "IPv4 Address" (usually starts with 192.168.x.x or 10.x.x.x)
+
+**On Mac/Linux:**
+```bash
+ifconfig
+# or
+ip addr
+```
+Look for inet address (usually starts with 192.168.x.x or 10.x.x.x)
+
+### 2. Configure API URL
+
+Edit the `config.js` file and change this line:
+```javascript
+API_URL: 'auto',  // Change this
+```
+
+To:
+```javascript
+API_URL: 'http://YOUR_IP_ADDRESS:3000',  // Example: 'http://192.168.1.100:3000'
+```
+
+### 3. Access from Other Devices
+
+On your phone or friend's phone, open the browser and go to:
+```
+http://YOUR_IP_ADDRESS:3000/login.html
+```
+
+Example: `http://192.168.1.100:3000/login.html`
+
+**Note**: All devices must be on the same WiFi network!
+
+### Troubleshooting
+- Make sure your computer's firewall allows connections on port 3000
+- Ensure all devices are connected to the same WiFi network
+- If you still can't connect, try disabling your computer's firewall temporarily
+
 ## 🔐 User Accounts & Real Database
 
 The app uses a **professional NestJS backend with TypeScript and file-based database**!
