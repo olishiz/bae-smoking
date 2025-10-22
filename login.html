@@ -254,13 +254,15 @@
             messageBox.className = 'message';
         }
 
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
 
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
 
-            const result = userDB.login(username, password);
+            showMessage('Logging in...', 'success');
+
+            const result = await userDB.login(username, password);
 
             if (result.success) {
                 showMessage(result.message, 'success');
@@ -272,7 +274,7 @@
             }
         }
 
-        function handleRegister(event) {
+        async function handleRegister(event) {
             event.preventDefault();
 
             const username = document.getElementById('registerUsername').value;
@@ -284,7 +286,9 @@
                 return;
             }
 
-            const result = userDB.register(username, password);
+            showMessage('Registering...', 'success');
+
+            const result = await userDB.register(username, password);
 
             if (result.success) {
                 showMessage(result.message + ' You can now login!', 'success');
@@ -302,8 +306,8 @@
             }
         }
 
-        function updateUserList() {
-            const usernames = userDB.getAllUsernames();
+        async function updateUserList() {
+            const usernames = await userDB.getAllUsernames();
             const listItems = document.getElementById('userListItems');
 
             if (usernames.length === 0) {

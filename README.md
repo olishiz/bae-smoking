@@ -1,22 +1,46 @@
 # 🌱 Bae Plant Growth Tracker
 
-A fun, gamified daily habit tracker where you nurture a virtual marijuana plant from seed to full maturity! Now with multi-user support!
+A fun, gamified daily habit tracker where you nurture a virtual marijuana plant from seed to full maturity! Now with **real backend server and database**!
 
-## 🔐 User Accounts
+## 🚀 Quick Start
 
-The app now supports multiple users, each with their own plant data!
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-### Registration & Login
+### 2. Start the Server
+```bash
+npm start
+```
+
+The server will start on http://localhost:3000
+
+### 3. Open the App
+Open your browser and go to:
+- **http://localhost:3000/login.html**
+
+### 4. Create Account & Start Growing!
+- Register a new account
+- Login with your credentials
+- Start growing your plant!
+
+## 🔐 User Accounts & Real Database
+
+The app now uses a **real backend server with file-based database**!
+
+### Why This Matters
+- **Works across devices**: Register on your phone, login on your friend's phone - same account!
+- **Persistent data**: All user data is stored in `database.json` on the server
+- **Multi-user support**: Each user has completely separate plant data
+- **Real authentication**: Session-based login system with tokens
+
+### Features
 - **Register**: Create a new account with username (min 3 characters) and password (min 4 characters)
-- **Login**: Access your personal plant tracker
+- **Login**: Access your personal plant tracker from any device connected to the server
 - **Logout**: Safely logout from your account
 - **Multiple Users**: Each user has completely separate plant data and progress
-
-### Getting Started
-1. Open `login.html` in your browser
-2. Click "Register" tab to create a new account
-3. After registration, login with your credentials
-4. Start growing your plant!
+- **Cross-device sync**: Login from different devices and your data is always there!
 
 ## 🎮 How It Works
 
@@ -69,13 +93,20 @@ Your plant goes through 7 stages of growth:
 
 ## 💾 Data Storage
 
+- **Real database file**: All data stored in `database.json` on the server
+- **Cross-device support**: Access your account from any device connected to the server
 - **Multi-user support**: Each user has their own separate data
-- All progress is saved automatically in your browser's local storage
-- Your data persists even when you close the browser
-- User accounts stored locally (username + password)
-- Each user can have their own plant with independent progress
+- **Persistent storage**: Data survives server restarts
+- **Session management**: Secure session tokens for authentication
+- **Automatic sync**: Changes are saved to the server in real-time
 - Use the "Reset Progress" button to reset your plant (keeps your account)
-- Logout anytime and login again to continue where you left off
+- Logout anytime and login again from any device to continue where you left off
+
+### Database Structure
+The `database.json` file contains:
+- All user accounts (username + password)
+- Each user's plant data (growth stage, stats, history)
+- Active session tokens
 
 ## 🎨 Features
 
@@ -94,11 +125,28 @@ Reach Day 35 to grow a fully mature plant! Can you maintain your streak all the 
 
 ## 🔧 Technical Details
 
-Built with:
-- Pure HTML5
-- CSS3 with animations
-- Vanilla JavaScript (no frameworks)
-- LocalStorage for data persistence
+### Backend
+- **Node.js** - Server runtime
+- **Express.js** - Web framework
+- **File-based JSON database** - Simple and portable
+- **CORS enabled** - Cross-origin resource sharing
+- **RESTful API** - Clean API endpoints
+
+### Frontend
+- **Pure HTML5** - No build tools required
+- **CSS3** - Beautiful animations
+- **Vanilla JavaScript** - No frameworks, async/await for API calls
+- **Fetch API** - Modern HTTP requests
+
+### API Endpoints
+- `POST /api/register` - Create new user account
+- `POST /api/login` - Login and get session token
+- `POST /api/logout` - Logout and invalidate session
+- `POST /api/session` - Verify session token
+- `POST /api/plant-data/get` - Get user's plant data
+- `POST /api/plant-data/save` - Save user's plant data
+- `GET /api/users` - List all usernames
+- `GET /api/health` - Server health check
 
 ## 📱 Browser Compatibility
 

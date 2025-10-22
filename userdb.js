@@ -1,127 +1,196 @@
-// Simple Local User Database
+// API-based User Database
 class UserDatabase {
     constructor() {
-        this.usersKey = 'plantTracker_users';
-        this.currentUserKey = 'plantTracker_currentUser';
+        this.apiUrl = window.location.origin; // Use same host as frontend
+        this.sessionTokenKey = 'plantTracker_sessionToken';
     }
 
-    // Get all users from localStorage
-    getAllUsers() {
-        const users = localStorage.getItem(this.usersKey);
-        return users ? JSON.parse(users) : {};
+    // Get session token from localStorage
+    getSessionToken() {
+        return localStorage.getItem(this.sessionTokenKey);
     }
 
-    // Save users to localStorage
-    saveUsers(users) {
-        localStorage.setItem(this.usersKey, JSON.stringify(users));
+    // Save session token to localStorage
+    setSessionToken(token) {
+        localStorage.setItem(this.sessionTokenKey, token);
+    }
+
+    // Remove session token
+    clearSessionToken() {
+        localStorage.removeItem(this.sessionTokenKey);
     }
 
     // Register a new user
-    register(username, password) {
-        if (!username || !password) {
-            return { success: false, message: 'Username and password are required' };
+    async register(username, password) {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Registration error:', error);
+            return { success: false, message: 'Network error. Please try again.' };
         }
-
-        if (username.length < 3) {
-            return { success: false, message: 'Username must be at least 3 characters' };
-        }
-
-        if (password.length < 4) {
-            return { success: false, message: 'Password must be at least 4 characters' };
-        }
-
-        const users = this.getAllUsers();
-
-        if (users[username]) {
-            return { success: false, message: 'Username already exists' };
-        }
-
-        // Create new user with empty plant data
-        users[username] = {
-            password: password, // In real app, this would be hashed
-            createdAt: new Date().toISOString(),
-            plantData: null // Will be initialized when they start the app
-        };
-
-        this.saveUsers(users);
-        return { success: true, message: 'Registration successful!' };
     }
 
     // Login user
-    login(username, password) {
-        if (!username || !password) {
-            return { success: false, message: 'Username and password are required' };
+    async login(username, password) {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+
+            if (data.success && data.sessionToken) {
+                this.setSessionToken(data.sessionToken);
+            }
+
+            return data;
+        } catch (error) {
+            console.error('Login error:', error);
+            return { success: false, message: 'Network error. Please try again.' };
         }
-
-        const users = this.getAllUsers();
-        const user = users[username];
-
-        if (!user) {
-            return { success: false, message: 'User not found' };
-        }
-
-        if (user.password !== password) {
-            return { success: false, message: 'Incorrect password' };
-        }
-
-        // Set current user session
-        localStorage.setItem(this.currentUserKey, username);
-        return { success: true, message: 'Login successful!', username: username };
-    }
-
-    // Get current logged-in user
-    getCurrentUser() {
-        return localStorage.getItem(this.currentUserKey);
     }
 
     // Logout current user
-    logout() {
-        localStorage.removeItem(this.currentUserKey);
+    async logout() {
+        const sessionToken = this.getSessionToken();
+
+        if (sessionToken) {
+            try {
+                await fetch(`${this.apiUrl}/api/logout`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sessionToken })
+                });
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        this.clearSessionToken();
     }
 
     // Check if user is logged in
     isLoggedIn() {
-        return this.getCurrentUser() !== null;
+        return this.getSessionToken() !== null;
+    }
+
+    // Get current logged-in user
+    async getCurrentUser() {
+        const sessionToken = this.getSessionToken();
+
+        if (!sessionToken) {
+            return null;
+        }
+
+        try {
+            const response = await fetch(`${this.apiUrl}/api/session`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sessionToken })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                return data.username;
+            } else {
+                // Invalid session, clear token
+                this.clearSessionToken();
+                return null;
+            }
+        } catch (error) {
+            console.error('Session check error:', error);
+            return null;
+        }
     }
 
     // Get user's plant data
-    getUserPlantData(username) {
-        const users = this.getAllUsers();
-        const user = users[username];
-        return user ? user.plantData : null;
+    async getUserPlantData() {
+        const sessionToken = this.getSessionToken();
+
+        if (!sessionToken) {
+            return null;
+        }
+
+        try {
+            const response = await fetch(`${this.apiUrl}/api/plant-data/get`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sessionToken })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                return data.plantData;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error('Get plant data error:', error);
+            return null;
+        }
     }
 
     // Save user's plant data
-    saveUserPlantData(username, plantData) {
-        const users = this.getAllUsers();
-        if (users[username]) {
-            users[username].plantData = plantData;
-            this.saveUsers(users);
-            return true;
+    async saveUserPlantData(username, plantData) {
+        const sessionToken = this.getSessionToken();
+
+        if (!sessionToken) {
+            return false;
         }
-        return false;
+
+        try {
+            const response = await fetch(`${this.apiUrl}/api/plant-data/save`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sessionToken, plantData })
+            });
+
+            const data = await response.json();
+            return data.success;
+        } catch (error) {
+            console.error('Save plant data error:', error);
+            return false;
+        }
     }
 
-    // Get all usernames (for admin purposes)
-    getAllUsernames() {
-        const users = this.getAllUsers();
-        return Object.keys(users);
-    }
+    // Get all usernames (for display on login page)
+    async getAllUsernames() {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/users`);
+            const data = await response.json();
 
-    // Delete user account
-    deleteAccount(username) {
-        const users = this.getAllUsers();
-        if (users[username]) {
-            delete users[username];
-            this.saveUsers(users);
-
-            // If deleting current user, logout
-            if (this.getCurrentUser() === username) {
-                this.logout();
+            if (data.success) {
+                return data.usernames;
+            } else {
+                return [];
             }
-            return true;
+        } catch (error) {
+            console.error('Get users error:', error);
+            return [];
         }
-        return false;
     }
 }
 

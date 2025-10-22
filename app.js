@@ -4,13 +4,6 @@ class PlantTracker {
         // Initialize user database
         this.userDB = new UserDatabase();
 
-        // Check if user is logged in
-        this.currentUser = this.userDB.getCurrentUser();
-        if (!this.currentUser) {
-            window.location.href = 'login.html';
-            return;
-        }
-
         this.growthStages = [
             { name: 'Seed', minDays: 0, emoji: '🌰', class: 'seed' },
             { name: 'Sprout', minDays: 3, emoji: '🌱', class: 'sprout' },
@@ -21,14 +14,26 @@ class PlantTracker {
             { name: 'Mature', minDays: 35, emoji: '🎄', class: 'mature' }
         ];
 
-        this.loadData();
+        // Initialize asynchronously
+        this.init();
+    }
+
+    async init() {
+        // Check if user is logged in
+        this.currentUser = await this.userDB.getCurrentUser();
+        if (!this.currentUser) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        await this.loadData();
         this.initializeUI();
         this.checkNewDay();
     }
 
-    loadData() {
+    async loadData() {
         // Load data for current user from user database
-        const saved = this.userDB.getUserPlantData(this.currentUser);
+        const saved = await this.userDB.getUserPlantData();
         if (saved) {
             this.currentDay = saved.currentDay || 0;
             this.lastCheckIn = saved.lastCheckIn || null;
@@ -56,7 +61,7 @@ class PlantTracker {
         this.todayCared = false;
     }
 
-    saveData() {
+    async saveData() {
         const data = {
             currentDay: this.currentDay,
             lastCheckIn: this.lastCheckIn,
@@ -69,7 +74,7 @@ class PlantTracker {
             todayCared: this.todayCared
         };
         // Save data for current user
-        this.userDB.saveUserPlantData(this.currentUser, data);
+        await this.userDB.saveUserPlantData(this.currentUser, data);
     }
 
     initializeUI() {
@@ -342,9 +347,9 @@ class PlantTracker {
         }
     }
 
-    logout() {
+    async logout() {
         if (confirm('Are you sure you want to logout?')) {
-            this.userDB.logout();
+            await this.userDB.logout();
             window.location.href = 'login.html';
         }
     }
