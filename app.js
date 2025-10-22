@@ -1,6 +1,16 @@
 // Plant Growth Tracker App
 class PlantTracker {
     constructor() {
+        // Initialize user database
+        this.userDB = new UserDatabase();
+
+        // Check if user is logged in
+        this.currentUser = this.userDB.getCurrentUser();
+        if (!this.currentUser) {
+            window.location.href = 'login.html';
+            return;
+        }
+
         this.growthStages = [
             { name: 'Seed', minDays: 0, emoji: '🌰', class: 'seed' },
             { name: 'Sprout', minDays: 3, emoji: '🌱', class: 'sprout' },
@@ -17,18 +27,18 @@ class PlantTracker {
     }
 
     loadData() {
-        const saved = localStorage.getItem('plantTrackerData');
+        // Load data for current user from user database
+        const saved = this.userDB.getUserPlantData(this.currentUser);
         if (saved) {
-            const data = JSON.parse(saved);
-            this.currentDay = data.currentDay || 0;
-            this.lastCheckIn = data.lastCheckIn || null;
-            this.waterCount = data.waterCount || 0;
-            this.careCount = data.careCount || 0;
-            this.streak = data.streak || 0;
-            this.history = data.history || [];
-            this.todayCheckedIn = data.todayCheckedIn || false;
-            this.todayWatered = data.todayWatered || false;
-            this.todayCared = data.todayCared || false;
+            this.currentDay = saved.currentDay || 0;
+            this.lastCheckIn = saved.lastCheckIn || null;
+            this.waterCount = saved.waterCount || 0;
+            this.careCount = saved.careCount || 0;
+            this.streak = saved.streak || 0;
+            this.history = saved.history || [];
+            this.todayCheckedIn = saved.todayCheckedIn || false;
+            this.todayWatered = saved.todayWatered || false;
+            this.todayCared = saved.todayCared || false;
         } else {
             this.resetData();
         }
@@ -58,7 +68,8 @@ class PlantTracker {
             todayWatered: this.todayWatered,
             todayCared: this.todayCared
         };
-        localStorage.setItem('plantTrackerData', JSON.stringify(data));
+        // Save data for current user
+        this.userDB.saveUserPlantData(this.currentUser, data);
     }
 
     initializeUI() {
@@ -79,6 +90,10 @@ class PlantTracker {
         document.getElementById('careBtn').addEventListener('click', () => this.giveCare());
         document.getElementById('checkInBtn').addEventListener('click', () => this.dailyCheckIn());
         document.getElementById('resetBtn').addEventListener('click', () => this.resetProgress());
+        document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
+
+        // Display current username
+        document.getElementById('currentUsername').textContent = this.currentUser;
 
         this.updateUI();
     }
@@ -319,12 +334,18 @@ class PlantTracker {
 
     resetProgress() {
         if (confirm('Are you sure you want to reset your progress? This cannot be undone!')) {
-            localStorage.removeItem('plantTrackerData');
             this.resetData();
             this.saveData();
             this.updateUI();
             this.showMessage('🔄 Progress reset. Start your new journey!');
             this.addHistory('🔄 Started a new journey');
+        }
+    }
+
+    logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            this.userDB.logout();
+            window.location.href = 'login.html';
         }
     }
 }

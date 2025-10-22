@@ -37,6 +37,42 @@ h1 {
     font-size: 1.1em;
 }
 
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.user-info span {
+    font-size: 1.1em;
+    color: #333;
+}
+
+.logout-btn {
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+}
+
+.logout-btn:active {
+    transform: translateY(0);
+}
+
 .stats-bar {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

@@ -1,6 +1,22 @@
 # 🌱 Bae Plant Growth Tracker
 
-A fun, gamified daily habit tracker where you nurture a virtual marijuana plant from seed to full maturity!
+A fun, gamified daily habit tracker where you nurture a virtual marijuana plant from seed to full maturity! Now with multi-user support!
+
+## 🔐 User Accounts
+
+The app now supports multiple users, each with their own plant data!
+
+### Registration & Login
+- **Register**: Create a new account with username (min 3 characters) and password (min 4 characters)
+- **Login**: Access your personal plant tracker
+- **Logout**: Safely logout from your account
+- **Multiple Users**: Each user has completely separate plant data and progress
+
+### Getting Started
+1. Open `login.html` in your browser
+2. Click "Register" tab to create a new account
+3. After registration, login with your credentials
+4. Start growing your plant!
 
 ## 🎮 How It Works
 
@@ -51,26 +67,26 @@ Your plant goes through 7 stages of growth:
 4. **Build your streak** - Consistency is key
 5. **Don't miss days** - Missing more than 1 day breaks your streak
 
-## 🚀 Getting Started
-
-1. Open `index.html` in your web browser
-2. Click "Daily Check-in" to start Day 1
-3. Water and give love to your plant
-4. Come back tomorrow to continue growing!
-
 ## 💾 Data Storage
 
+- **Multi-user support**: Each user has their own separate data
 - All progress is saved automatically in your browser's local storage
 - Your data persists even when you close the browser
-- Use the "Reset Progress" button to start over
+- User accounts stored locally (username + password)
+- Each user can have their own plant with independent progress
+- Use the "Reset Progress" button to reset your plant (keeps your account)
+- Logout anytime and login again to continue where you left off
 
 ## 🎨 Features
 
+- **Multi-user support** - Each user has their own account and plant data
+- **User authentication** - Register, login, and logout functionality
 - **Beautiful animations** - Watch your plant sway in the wind
 - **Progress tracking** - See exactly how far you are to the next stage
 - **History log** - Review your journey with your plant
 - **Responsive design** - Works on mobile and desktop
 - **Automatic save** - Never lose your progress
+- **Local database** - All data stored securely in your browser
 
 ## 🏆 Achievement
 
